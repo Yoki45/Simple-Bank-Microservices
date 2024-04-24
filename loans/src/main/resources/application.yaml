@@ -6,8 +6,8 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: yoki
-    password: Ssteve123!
+    username: root
+    password: 12345678
     url: jdbc:mysql://localhost:3306/loans?createDatabaseIfNotExist=true
 
   jpa:
