@@ -9,12 +9,14 @@ import com.microservice.cards.exception.ResourceNotFoundException;
 import com.microservice.cards.mapper.CardsMapper;
 import com.microservice.cards.repository.CardsRepository;
 import com.microservice.cards.service.IcardsService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Random;
 
 @Service
+@AllArgsConstructor
 public class CardsServiceImpl implements IcardsService {
 
 
@@ -56,10 +58,13 @@ public class CardsServiceImpl implements IcardsService {
      */
     @Override
     public CardsDTO fetchCard(String mobileNumber) {
-        Cards cards = cardsRepository.findByMobileNumber(mobileNumber).orElseThrow(
-                () -> new ResourceNotFoundException("Card", "mobileNumber", mobileNumber)
-        );
-        return CardsMapper.mapToCardsDto(cards, new CardsDTO());
+        Optional<Cards> cards = cardsRepository.findByMobileNumber(mobileNumber);
+
+        if(!cards.isPresent()){
+            throw  new ResourceNotFoundException("Card", "mobileNumber", mobileNumber);
+        }
+
+        return CardsMapper.mapToCardsDto(cards.get(), new CardsDTO());
     }
 
     @Override
