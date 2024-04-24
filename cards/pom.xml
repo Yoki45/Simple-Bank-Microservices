@@ -11,6 +11,7 @@
 	<groupId>com.microservice</groupId>
 	<artifactId>cards</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>cards</name>
 	<description>Demo project for cards microservice</description>
 	<properties>
@@ -99,6 +100,10 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<image>
+						<name>yooki/${project.artifactId}:v1</name>
+					</image>
+
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
@@ -107,6 +112,16 @@
 					</excludes>
 				</configuration>
 			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>com.google.cloud.tools</groupId>-->
+<!--				<artifactId>jib-maven-plugin</artifactId>-->
+<!--				<version>3.4.1</version>-->
+<!--				<configuration>-->
+<!--					<to>-->
+<!--						<image>yooki/${project.artifactId}:v1</image>-->
+<!--					</to>-->
+<!--				</configuration>-->
+<!--			</plugin>-->
 		</plugins>
 	</build>
 
