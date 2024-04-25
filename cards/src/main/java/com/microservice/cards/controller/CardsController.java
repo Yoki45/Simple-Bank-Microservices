@@ -2,6 +2,7 @@ package com.microservice.cards.controller;
 
 
 import com.microservice.cards.constants.CardsConstants;
+import com.microservice.cards.dto.CardsContactsInfoDTO;
 import com.microservice.cards.dto.CardsDTO;
 import com.microservice.cards.dto.ErrorResponseDTO;
 import com.microservice.cards.dto.ResponseDTO;
@@ -15,6 +16,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +31,26 @@ import org.springframework.web.bind.annotation.*;
         name = "CRUD REST APIs for Cards ",
         description = "CRUD REST APIs to CREATE, UPDATE, FETCH AND DELETE card details"
 )
-@AllArgsConstructor
 @Validated
 public class CardsController {
 
 
-    private IcardsService iCardsService;
+    private  final IcardsService iCardsService;
+
+    public CardsController(IcardsService iCardsService) {
+        this.iCardsService = iCardsService;
+    }
+
+    @Value("${build.version}")
+    private String buildVersion;
+
+    @Autowired
+    private Environment environment;
+
+    @Autowired
+    private CardsContactsInfoDTO cardsContactsInfoDTO;
+
+
 
     @Operation(
             summary = "Create Card REST API",
@@ -157,6 +175,60 @@ public class CardsController {
                     .status(HttpStatus.EXPECTATION_FAILED)
                     .body(new ResponseDTO(CardsConstants.STATUS_417, CardsConstants.MESSAGE_417_DELETE));
         }
+    }
+
+
+
+    @Operation(summary = "Get Build Information", description = "Get Build information that is deployed.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "HTTP Status OK"),
+            @ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)
+                    )
+            )
+    }
+    )
+    @GetMapping("/version")
+    public ResponseEntity<String> getVersion(){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(buildVersion);
+    }
+
+
+
+
+    @Operation(summary = "Get Java Version", description = "Get java version information that is deployed.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "HTTP Status OK"),
+            @ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)
+                    )
+            )
+    }
+    )
+    @GetMapping("/java-version")
+    public ResponseEntity<String> getJavaVersion(){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(environment.getProperty("JAVA_HOME"));
+    }
+
+
+    @Operation(summary = "Contact InfoDetails", description = " Contact Details information.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "HTTP Status OK"),
+            @ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)
+                    )
+            )
+    }
+    )
+    @GetMapping("/contact-info")
+    public ResponseEntity<CardsContactsInfoDTO> getContactInformation(){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(cardsContactsInfoDTO);
     }
 
 

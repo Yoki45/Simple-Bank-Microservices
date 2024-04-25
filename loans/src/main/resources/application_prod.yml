@@ -1,0 +1,17 @@
+spring:
+  config:
+    activate:
+      on-profile: "prod"
+
+
+build:
+  version: "2.0"
+
+loans:
+  message: " Welcome home-prod"
+  contactDetails:
+    name: "Hello World 2"
+    email: "hello@gmail.com"
+  onCallSupport:
+    -4378549805078
+    -8698065899060

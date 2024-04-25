@@ -1,0 +1,18 @@
+spring:
+  config:
+    activate:
+      on-profile: "qa"
+
+
+
+build:
+  version: "1.0"
+
+loans:
+  message: " Welcome home-qa"
+  contactDetails:
+    name: "Hello World 3"
+    email: "hello@gmail.com"
+  onCallSupport:
+    -4378549805078
+    -8698065899060

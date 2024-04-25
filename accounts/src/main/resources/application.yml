@@ -4,18 +4,26 @@
     port: 8080
 
   spring:
-        datasource:
-          driver-class-name: com.mysql.cj.jdbc.Driver
-          username: root
-          password: 12345678
-          url: jdbc:mysql://localhost:3306/accounts?createDatabaseIfNotExist=true
+    datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+      password: 12345678
+      url: jdbc:mysql://localhost:3306/accounts?createDatabaseIfNotExist=true
 
-        jpa:
-          properties:
-            hibernate:
-              hbm2ddl:
-                auto: update
-          show-sql: true
+    jpa:
+      properties:
+        hibernate:
+          hbm2ddl:
+            auto: update
+      show-sql: true
+    config:
+      import:
+        - "application_qa.yml"
+        - "application_prod.yml"
+    profiles:
+      active:
+        - "qa"
+
 
   logging:
         level:
@@ -24,5 +32,14 @@
 
 
 
+  build:
+    version: "3.0"
 
-
+  accounts:
+    message: " Welcome home"
+    contactDetails:
+      name: "Hello World"
+      email: "hello@gmail.com"
+    onCallSupport:
+      -4378549805078
+      -8698065899060
