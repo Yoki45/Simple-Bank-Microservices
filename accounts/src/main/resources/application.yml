@@ -16,13 +16,20 @@
           hbm2ddl:
             auto: update
       show-sql: true
-    config:
-      import:
-        - "application_qa.yml"
-        - "application_prod.yml"
+
+    application:
+      name: "accounts"
     profiles:
-      active:
-        - "qa"
+      active: "prod"
+    config:
+      import: "optional:configserver:http://localhost:8071/"
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+
+
 
 
   logging:
@@ -31,15 +38,3 @@
           org.hibernate.type: TRACE
 
 
-
-  build:
-    version: "3.0"
-
-  accounts:
-    message: " Welcome home"
-    contactDetails:
-      name: "Hello World"
-      email: "hello@gmail.com"
-    onCallSupport:
-      -4378549805078
-      -8698065899060

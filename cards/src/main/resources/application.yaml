@@ -14,29 +14,22 @@ spring:
         hbm2ddl:
           auto: update
     show-sql: true
-  config:
-    import:
-      - "application_qa.yml"
-      - "application_prod.yml"
   profiles:
-    active:
-      - "qa"
+    active:  "prod"
+  application:
+    name: "cards"
+  config:
+    import: "optional:configserver:http://localhost:8071/"
+
+management:
+  endpoints:
+     web:
+       exposure:
+         include: "*"
 
 logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type: TRACE
 
-
-build:
-  version: "3.0"
-
-cards:
-  message: " Welcome home"
-  contactDetails:
-    name: "Hello World"
-    email: "hello@gmail.com"
-  onCallSupport:
-    -4378549805078
-    -8698065899060
 

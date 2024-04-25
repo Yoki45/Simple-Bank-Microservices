@@ -17,12 +17,17 @@ spring:
           auto: update
     show-sql: true
   config:
-    import:
-      - "application_qa.yml"
-      - "application_prod.yml"
+    import: "optional:configserver:http://localhost:8071/"
+  application:
+    name: "loans"
   profiles:
-    active:
-      - "qa"
+    active: "prod"
+management:
+  endpoints:
+    web:
+     exposure:
+        include: "*"
+
 
 logging:
   level:
@@ -30,14 +35,4 @@ logging:
     org.hibernate.type: TRACE
 
 
-build:
-  version: "3.0"
 
-loans:
-  message: " Welcome home"
-  contactDetails:
-    name: "Hello World"
-    email: "hello@gmail.com"
-  onCallSupport:
-    -4378549805078
-    -8698065899060
