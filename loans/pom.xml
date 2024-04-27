@@ -100,10 +100,9 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<image>
-						<name>yooki/${project.artifactId}:v2</name>
-					</image>
-
+<!--					<image>-->
+<!--						<name>yooki/${project.artifactId}:v2</name>-->
+<!--					</image>-->
 
 					<excludes>
 						<exclude>
@@ -113,6 +112,18 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.4.1</version>
+				<configuration>
+					<to>
+						<image>yooki/${project.artifactId}:v2</image>
+					</to>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 
