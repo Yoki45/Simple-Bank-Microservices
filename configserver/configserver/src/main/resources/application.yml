@@ -28,20 +28,20 @@ encrypt:
   key: "72E2EFA0AA79B3791B5E2637F4B26F45"
 
 
-  management:
-    endpoints:
-      web:
-        exposure:
-          include: "*"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
     health:
-      readiness-state:
+      probes:
         enabled: true
-      liveness-state:
-        enabled: true
-      endpoint:
-        health:
-          probes:
-            enabled: true
 
 
 
