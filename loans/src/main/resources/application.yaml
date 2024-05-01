@@ -8,7 +8,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 12345678
-    url: jdbc:mysql://localhost:3306/loansdb
+    url: jdbc:mysql://localhost:3308/loansdb
 
   jpa:
     properties:
@@ -32,10 +32,20 @@ management:
     web:
      exposure:
         include: "*"
-
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
   endpoint:
     shutdown:
       enabled: true
+    health:
+      probes:
+        enabled: true
+
+
+
 
   info:
     env:
@@ -59,8 +69,10 @@ info:
 
 logging:
   level:
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type: TRACE
+    com:
+      microservices:
+        loans: DEBUG
+
 
 
 

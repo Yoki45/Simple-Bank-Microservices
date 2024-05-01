@@ -8,7 +8,7 @@
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: root
       password: 12345678
-      url: jdbc:mysql://localhost:3306/accountsdb
+      url: jdbc:mysql://localhost:3307/accountsdb
 
     jpa:
       properties:
@@ -34,9 +34,17 @@
       web:
         exposure:
           include: "*"
+    health:
+      readiness-state:
+        enabled: true
+      liveness-state:
+        enabled: true
     endpoint:
       shutdown:
         enabled: true
+      health:
+        probes:
+          enabled: true
 
     info:
       env:
@@ -65,9 +73,17 @@
 
 
 
+
+
   logging:
-        level:
-          org.hibernate.SQL: DEBUG
-          org.hibernate.type: TRACE
+    level:
+      com:
+        microservices:
+          accounts: DEBUG
+
+
+
+
+
 
 

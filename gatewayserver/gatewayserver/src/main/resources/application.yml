@@ -1,0 +1,54 @@
+#always mantain the indentations
+spring:
+  application:
+    name: "gatewayserver"
+  config:
+    import: "optional:configserver:http://localhost:8071/"
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+#          enabled: false - this removes/disables the default routing paths from the gateway
+          lower-case-service-id: true
+
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "guest"
+    password: "guest"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      enabled: true
+
+  info:
+    env:
+      enabled: true
+
+
+info:
+  app:
+    name: "Gate way server"
+    description: "Gate way service"
+    version: "1.0.0"
+
+
+
+
+logging:
+  level:
+    com:
+      gatewayserver: DEBUG
+
+
+
+
+
+
+

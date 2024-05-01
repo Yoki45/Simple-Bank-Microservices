@@ -25,14 +25,13 @@ public class CustomerServiceImpl  implements ICustomerService {
 
     private AccountsRepository accountsRepository;
     private CustomerRepository customerRepository;
-    //Since we are accessing both cards and loans from different services.
+    //Since we are accessing both cards and loans from different services- communication between services.
     private CardsFeignClient cardsFeignClient;
     private LoansFeignClient loansFeignClient;
 
 
-
     @Override
-    public CustomerDetailsDTO fetchCustomerDetails(String mobileNumber) {
+    public CustomerDetailsDTO fetchCustomerDetails(String mobileNumber, String correlationId) {
         Customer customer = customerRepository.findCustomerByMobileNumber(mobileNumber).orElseThrow(
                 () -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber)
         );
@@ -43,10 +42,10 @@ public class CustomerServiceImpl  implements ICustomerService {
         CustomerDetailsDTO customerDetailsDto = CustomerMapper.mapToCustomerDetailsDto(customer, new CustomerDetailsDTO());
         customerDetailsDto.setAccountsDto(AccountsMapper.mapToAccountsDto(accounts, new AccountsDto()));
 
-        ResponseEntity<LoanDTO> loansDtoResponseEntity = loansFeignClient.fetchLoanDetails(mobileNumber);
+        ResponseEntity<LoanDTO> loansDtoResponseEntity = loansFeignClient.fetchLoanDetails(mobileNumber,correlationId);
         customerDetailsDto.setLoansDto(loansDtoResponseEntity.getBody());
 
-        ResponseEntity<CardsDTO> cardsDtoResponseEntity = cardsFeignClient.fetchCardDetails(mobileNumber);
+        ResponseEntity<CardsDTO> cardsDtoResponseEntity = cardsFeignClient.fetchCardDetails(mobileNumber,correlationId);
         customerDetailsDto.setCardsDto(cardsDtoResponseEntity.getBody());
 
         return customerDetailsDto;
