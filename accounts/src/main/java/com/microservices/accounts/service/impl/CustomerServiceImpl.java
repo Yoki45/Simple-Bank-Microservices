@@ -15,6 +15,7 @@ import com.microservices.accounts.service.ICustomerService;
 import com.microservices.accounts.service.client.CardsFeignClient;
 import com.microservices.accounts.service.client.LoansFeignClient;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,9 @@ public class CustomerServiceImpl  implements ICustomerService {
     private AccountsRepository accountsRepository;
     private CustomerRepository customerRepository;
     //Since we are accessing both cards and loans from different services- communication between services.
-    private CardsFeignClient cardsFeignClient;
+    @Qualifier("com.microservices.accounts.service.client.CardsFeignClient")
+    private  CardsFeignClient cardsFeignClient;
+    @Qualifier("com.microservices.accounts.service.client.LoansFeignClient")
     private LoansFeignClient loansFeignClient;
 
 
@@ -43,10 +46,15 @@ public class CustomerServiceImpl  implements ICustomerService {
         customerDetailsDto.setAccountsDto(AccountsMapper.mapToAccountsDto(accounts, new AccountsDto()));
 
         ResponseEntity<LoanDTO> loansDtoResponseEntity = loansFeignClient.fetchLoanDetails(mobileNumber,correlationId);
-        customerDetailsDto.setLoansDto(loansDtoResponseEntity.getBody());
+
+       if(loansDtoResponseEntity != null && loansDtoResponseEntity.getBody() != null) {
+           customerDetailsDto.setLoansDto(loansDtoResponseEntity.getBody());
+       }
 
         ResponseEntity<CardsDTO> cardsDtoResponseEntity = cardsFeignClient.fetchCardDetails(mobileNumber,correlationId);
-        customerDetailsDto.setCardsDto(cardsDtoResponseEntity.getBody());
+       if(cardsDtoResponseEntity != null && cardsDtoResponseEntity.getBody() != null) {
+           customerDetailsDto.setCardsDto(cardsDtoResponseEntity.getBody());
+       }
 
         return customerDetailsDto;
     }
