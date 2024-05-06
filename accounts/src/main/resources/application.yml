@@ -1,109 +1,90 @@
-#always mantain the indentations
+server:
+  port: 8080
 
-  server:
-    port: 8080
-
-  spring:
-    datasource:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      username: root
-      password: 12345678
-      url: jdbc:mysql://localhost:3307/accountsdb
-
-    jpa:
-      properties:
-        hibernate:
-          hbm2ddl:
-            auto: update
-      show-sql: true
-    cloud:
-      openfeign:
-        circuitbreaker:
-          enabled: true
-
-    application:
-      name: "accounts"
-    profiles:
-      active: "prod"
-    config:
-      import: "optional:configserver:http://localhost:8071/"
-    rabbitmq:
-      host: "localhost"
-      port: 5672
-      username: "guest"
-      password: "guest"
-
-  management:
-    endpoints:
-      web:
-        exposure:
-          include: "*"
-    health:
-      readiness-state:
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 12345678
+    url: jdbc:mysql://localhost:3307/accountsdb
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+    show-sql: true
+  cloud:
+    openfeign:
+      circuitbreaker:
         enabled: true
-      liveness-state:
-        enabled: true
-    endpoint:
-      shutdown:
-        enabled: true
-      health:
-        probes:
-          enabled: true
+  application:
+    name: "accounts"
+  profiles:
+    active: "prod"
+  config:
+    import: "optional:configserver:http://localhost:8071/"
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "guest"
+    password: "guest"
 
-    info:
-      env:
-        enabled: true
-
+management:
   endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness:
+      enabled: true
+    liveness:
+      enabled: true
+  endpoint:
     shutdown:
       enabled: true
-
-
-  eureka:
-    instance:
-      preferIpAddress: true
-    client:
-      fetchRegistry: true
-      registerWithEureka: true
-      serviceUrl:
-        defaultZone: http://localhost:8070/eureka/
-
   info:
-    app:
-      name: "accounts"
-      description: " Accounts service"
-      version: "1.0.0"
+    env:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
+endpoints:
+  shutdown:
+    enabled: true
 
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka/
 
+info:
+  app:
+    name: "accounts"
+    description: "Accounts service"
+    version: "1.0.0"
 
+logging:
+  level:
+    com:
+      microservices:
+        accounts: DEBUG
 
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10
+      permittedNumberOfCallsInHalfOpenState: 2
+      failureRateThreshold: 50
+      waitDurationInOpenState: 10000
 
-  logging:
-    level:
-      com:
-        microservices:
-          accounts: DEBUG
-
-  resilience4j.circuitbreaker:
-    configs:
-      #this default can be changed to a specific circuit breaker name which is set on the gateway main class.
-      default:
-        slidingWindowSize: 10
-        permittedNumberOfCallsInHalfOpenState: 2
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10000
-
-  resilience4j.ratelimiter:
-    configs:
-      default:
-        timeoutDuration: 1000
-        limitRefreshPeriod: 5000
-        limitForPeriod: 1
-
-
-
-
-
-
-
+resilience4j.ratelimiter:
+  configs:
+    default:
+      timeoutDuration: 1000
+      limitRefreshPeriod: 5000
+      limitForPeriod: 1
