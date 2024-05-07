@@ -16,6 +16,7 @@ services:
       OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
       OTEL_METRICS_EXPORTER: none
 
+
   microservice-configserver-config:
     extends:
       service: microservice-base-config
